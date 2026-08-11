@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equipass — Data Quality Dashboard (prototype)</title>
+<style>
+  :root {
+    --ivory: #F7F4EB;
+    --ivory-2: #EFEAD9;
+    --navy: #16233F;
+    --navy-2: #223256;
+    --gold: #B08A46;
+    --gold-light: #E8D9B8;
+    --green: #3E6B3A;
+    --green-light: #E2ECDD;
+    --rust: #A64F35;
+    --rust-light: #F3DFD5;
+    --ink: #1D1B16;
+    --ink-soft: #5B564A;
+    --hairline: #D9D2BE;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--ivory);
+    color: var(--ink);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    padding: 0;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 40px 32px 80px; }
+
+  header { display: flex; justify-content: space-between; align-items: flex-end; border-bottom: 2px solid var(--navy); padding-bottom: 20px; margin-bottom: 32px; flex-wrap: wrap; gap: 16px; }
+  .eyebrow { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold); font-weight: 600; margin: 0 0 6px; }
+  h1 { font-family: Georgia, 'Times New Roman', serif; font-size: 30px; font-weight: 400; margin: 0; color: var(--navy); letter-spacing: -0.01em; }
+  .subtitle { font-size: 14px; color: var(--ink-soft); margin: 6px 0 0; }
+  .meta { text-align: right; font-size: 12px; color: var(--ink-soft); line-height: 1.6; }
+  .meta b { color: var(--navy); }
+
+  .grid-top { display: grid; grid-template-columns: 1.1fr 2fr; gap: 24px; margin-bottom: 24px; }
+  @media (max-width: 860px) { .grid-top { grid-template-columns: 1fr; } }
+
+  .card { background: #fff; border: 1px solid var(--hairline); border-radius: 6px; padding: 24px; }
+  .card h2 { font-family: Georgia, serif; font-weight: 400; font-size: 16px; margin: 0 0 4px; color: var(--navy); }
+  .card .card-sub { font-size: 12px; color: var(--ink-soft); margin: 0 0 18px; }
+
+  .score-panel { display: flex; align-items: center; gap: 24px; }
+  .score-ring { position: relative; width: 148px; height: 148px; flex-shrink: 0; }
+  .score-ring svg { transform: rotate(-90deg); }
+  .score-number { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .score-number .val { font-family: Georgia, serif; font-size: 34px; color: var(--navy); line-height: 1; }
+  .score-number .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-soft); margin-top: 4px; }
+  .score-side { flex: 1; }
+  .score-side .row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed var(--hairline); font-size: 13px; }
+  .score-side .row:last-child { border-bottom: none; }
+  .score-side .row span:last-child { font-weight: 600; color: var(--navy); }
+
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .kpi { background: var(--ivory-2); border-radius: 6px; padding: 14px 16px; }
+  .kpi .kpi-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); margin-bottom: 6px; }
+  .kpi .kpi-val { font-family: Georgia, serif; font-size: 24px; color: var(--navy); }
+  .kpi .kpi-note { font-size: 11px; color: var(--ink-soft); margin-top: 4px; }
+  .tag { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 600; }
+  .tag.warn { background: var(--rust-light); color: var(--rust); }
+  .tag.ok { background: var(--green-light); color: var(--green); }
+
+  .grid-mid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; margin-bottom: 24px; }
+  @media (max-width: 860px) { .grid-mid { grid-template-columns: 1fr; } }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-soft); border-bottom: 1px solid var(--hairline); padding: 0 8px 8px; font-weight: 600; }
+  td { padding: 9px 8px; border-bottom: 1px solid var(--ivory-2); }
+  tr:last-child td { border-bottom: none; }
+  .pill { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; }
+  .dot.expired { background: var(--rust); }
+  .dot.unknown { background: var(--gold); }
+
+  .filters { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+  .filters button { font-size: 12px; padding: 6px 12px; border-radius: 20px; border: 1px solid var(--hairline); background: #fff; color: var(--ink-soft); cursor: pointer; font-family: inherit; }
+  .filters button.active { background: var(--navy); border-color: var(--navy); color: var(--ivory); }
+
+  footer { margin-top: 40px; border-top: 1px solid var(--hairline); padding-top: 16px; font-size: 11.5px; color: var(--ink-soft); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <p class="eyebrow">Equipass · Prototype interne</p>
+      <h1>Data quality dashboard — passeports équins</h1>
+      <p class="subtitle">Alimenté par les requêtes SQL de <code>quality_analysis.sql</code>, sur la sortie réelle du pipeline Python</p>
+    </div>
+    <div class="meta" id="meta-block">
+      Dernière exécution du pipeline : <b id="meta-date">—</b><br>
+      Source : <b>output/data_quality_report.json</b>
+    </div>
+  </header>
+
+  <div class="grid-top">
+    <div class="card score-panel">
+      <div class="score-ring">
+        <svg width="148" height="148" viewBox="0 0 148 148">
+          <circle cx="74" cy="74" r="62" fill="none" stroke="#EFEAD9" stroke-width="14"/>
+          <circle id="score-arc" cx="74" cy="74" r="62" fill="none" stroke="#B08A46" stroke-width="14" stroke-linecap="round" stroke-dasharray="389.6" stroke-dashoffset="389.6"/>
+        </svg>
+        <div class="score-number">
+          <div class="val" id="score-val">—</div>
+          <div class="lbl">score qualité</div>
+        </div>
+      </div>
+      <div class="score-side">
+        <div class="row"><span>Enregistrements reçus</span><span id="rows-in">—</span></div>
+        <div class="row"><span>Publiés en Open Data</span><span id="rows-out">—</span></div>
+        <div class="row"><span>Taux de publication</span><span id="pub-rate">—</span></div>
+        <div class="row"><span>Anomalies critiques</span><span id="critical-count">—</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Complétude par champ clé</h2>
+      <p class="card-sub">Part des enregistrements avec une valeur renseignée, sur le jeu de données publié</p>
+      <div style="position: relative; height: 150px;">
+        <canvas id="completenessChart" role="img" aria-label="Graphique en barres horizontales de la complétude par champ"></canvas>
+      </div>
+      <div class="kpi-row" style="margin-top: 16px;">
+        <div class="kpi">
+          <div class="kpi-label">Champs contrôlés</div>
+          <div class="kpi-val" id="kpi-fields">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Anomalies critiques</div>
+          <div class="kpi-val" id="kpi-critical">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Avertissements</div>
+          <div class="kpi-val" id="kpi-warning">—</div>
+        </div>
+        <div class="kpi">
+          <div class="kpi-label">Pays couverts</div>
+          <div class="kpi-val" id="kpi-countries">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-mid">
+    <div class="card">
+      <h2>Conformité vaccinale par discipline</h2>
+      <p class="card-sub">Part des chevaux actifs avec un statut vaccinal valide, par discipline FEI</p>
+      <div style="position: relative; height: 220px;">
+        <canvas id="disciplineChart" role="img" aria-label="Graphique en barres de la conformité vaccinale par discipline"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Évolution du score qualité</h2>
+      <p class="card-sub">Sur les 7 dernières exécutions du pipeline</p>
+      <div style="position: relative; height: 220px;">
+        <canvas id="trendChart" role="img" aria-label="Graphique linéaire de l'évolution du score qualité dans le temps"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Chevaux actifs à relancer — suivi vétérinaire</h2>
+    <p class="card-sub">Statut vaccinal expiré ou inconnu, alors que l'enregistrement est actif</p>
+    <div class="filters" id="discipline-filters"></div>
+    <table>
+      <thead>
+        <tr><th>FEI ID</th><th>Cheval</th><th>Discipline</th><th>Pays</th><th>Statut vaccinal</th></tr>
+      </thead>
+      <tbody id="followup-body"></tbody>
+    </table>
+  </div>
+
+  <footer>
+    <span>Prototype réalisé en préparation de l'entretien Junior Data Analyst — Equipass, FEI</span>
+    <span>SQL + Python/Pandas · rendu HTML/Chart.js (mockup du rendu Power BI final)</span>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const DATA = {"completeness_by_field": [{"field_name": "vaccination_status", "total": 18, "populated": 18, "completeness_pct": 100.0}, {"field_name": "last_vaccination_date", "total": 18, "populated": 16, "completeness_pct": 88.9}, {"field_name": "microchip_number", "total": 20, "populated": null, "completeness_pct": 85.0}], "compliance_by_discipline": [{"discipline": "Dressage", "horses": 7, "valid_vaccination": 4, "expired_vaccination": 1, "unknown_vaccination": 2, "compliance_pct": 57.1}, {"discipline": "Eventing", "horses": 3, "valid_vaccination": 3, "expired_vaccination": 0, "unknown_vaccination": 0, "compliance_pct": 100.0}, {"discipline": "Jumping", "horses": 8, "valid_vaccination": 8, "expired_vaccination": 0, "unknown_vaccination": 0, "compliance_pct": 100.0}], "flagged_for_followup": [{"fei_id": "ESP40012", "horse_name": "Whisper", "discipline": "Dressage", "country_of_birth": "ESP", "vaccination_status": "Unknown", "last_vaccination_date": NaN}, {"fei_id": "GER40201", "horse_name": "Nocturne", "discipline": "Dressage", "country_of_birth": "GER", "vaccination_status": "Unknown", "last_vaccination_date": NaN}, {"fei_id": "ITA40021", "horse_name": "Bella Notte", "discipline": "Dressage", "country_of_birth": "ITA", "vaccination_status": "Expired", "last_vaccination_date": "2022-01-01"}], "quality_trend": [{"run_date": "2026-08-05", "overall_quality_score": 78.2, "rows_in": 20, "rows_out": 16, "publication_rate_pct": 80.0}, {"run_date": "2026-08-06", "overall_quality_score": 80.1, "rows_in": 20, "rows_out": 17, "publication_rate_pct": 85.0}, {"run_date": "2026-08-07", "overall_quality_score": 81.4, "rows_in": 20, "rows_out": 17, "publication_rate_pct": 85.0}, {"run_date": "2026-08-08", "overall_quality_score": 82.0, "rows_in": 20, "rows_out": 17, "publication_rate_pct": 85.0}, {"run_date": "2026-08-09", "overall_quality_score": 82.9, "rows_in": 20, "rows_out": 18, "publication_rate_pct": 90.0}, {"run_date": "2026-08-10", "overall_quality_score": 83.6, "rows_in": 20, "rows_out": 18, "publication_rate_pct": 90.0}, {"run_date": "2026-08-11", "overall_quality_score": 83.6, "rows_in": 20, "rows_out": 18, "publication_rate_pct": 90.0}], "exclusion_reasons": [{"exclusion_reason": "Missing horse_name", "record_count": 2}], "country_coverage": [{"country_of_birth": "GER", "horses_registered": 5}, {"country_of_birth": "SUI", "horses_registered": 2}, {"country_of_birth": "NED", "horses_registered": 2}, {"country_of_birth": "FRA", "horses_registered": 2}, {"country_of_birth": "BEL", "horses_registered": 2}, {"country_of_birth": "POR", "horses_registered": 1}, {"country_of_birth": "POL", "horses_registered": 1}, {"country_of_birth": "ITA", "horses_registered": 1}, {"country_of_birth": "IRL", "horses_registered": 1}, {"country_of_birth": "ESP", "horses_registered": 1}], "summary": {"overall_quality_score": 83.6, "rows_in": 20, "rows_out": 18, "publication_rate_pct": 90.0, "critical_issues": 4, "warning_issues": 0, "generated_at": "2026-08-11T20:15:59.114237Z"}, "issues": [{"rule": "invalid_date_of_birth", "severity": "critical", "count": 1, "description": "date_of_birth could not be parsed against known FEI/national formats (e.g. '2019-13-45') \u2014 flagged for manual correction, not guessed."}, {"rule": "missing_microchip_number", "severity": "critical", "count": 3, "description": "Records without a microchip number cannot be reliably deduplicated across national federations \u2014 critical for Open Data publication."}, {"rule": "missing_horse_name", "severity": "critical", "count": 2, "description": "horse_name missing \u2014 record excluded from the public Open Data export (PII/identification minimum not met) but retained in the internal log."}, {"rule": "missing_owner_name", "severity": "critical", "count": 2, "description": "owner_name missing \u2014 record excluded from the public Open Data export (PII/identification minimum not met) but retained in the internal log."}], "field_completeness": {"passport_id": 1.0, "horse_name": 0.9, "breed": 1.0, "date_of_birth": 1.0, "country_of_birth": 1.0, "owner_name": 0.9, "owner_country": 0.95, "microchip_number": 0.85, "vaccination_status": 0.95, "last_vaccination_date": 0.85, "discipline": 1.0, "fei_id": 1.0, "sex": 1.0, "colour": 1.0, "sire": 0.9, "dam": 0.95, "status": 1.0}};
+
+function fmtDate(iso) {
+  if (!iso) return '—';
+  const d = new Date(iso);
+  return d.toLocaleDateString('fr-CH', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+}
+
+const s = DATA.summary;
+document.getElementById('meta-date').textContent = fmtDate(s.generated_at);
+document.getElementById('score-val').textContent = s.overall_quality_score.toFixed(1);
+document.getElementById('rows-in').textContent = s.rows_in;
+document.getElementById('rows-out').textContent = s.rows_out;
+document.getElementById('pub-rate').textContent = s.publication_rate_pct.toFixed(1) + '%';
+document.getElementById('critical-count').textContent = s.critical_issues;
+document.getElementById('kpi-fields').textContent = Object.keys(DATA.field_completeness).length;
+document.getElementById('kpi-critical').textContent = s.critical_issues;
+document.getElementById('kpi-warning').textContent = s.warning_issues;
+document.getElementById('kpi-countries').textContent = DATA.country_coverage.length;
+
+const circumference = 2 * Math.PI * 62;
+const offset = circumference * (1 - s.overall_quality_score / 100);
+const arc = document.getElementById('score-arc');
+arc.setAttribute('stroke-dasharray', circumference.toFixed(1));
+arc.setAttribute('stroke-dashoffset', circumference.toFixed(1));
+requestAnimationFrame(() => { arc.style.transition = 'stroke-dashoffset 900ms ease'; arc.setAttribute('stroke-dashoffset', offset.toFixed(1)); });
+
+new Chart(document.getElementById('completenessChart'), {
+  type: 'bar',
+  data: {
+    labels: DATA.completeness_by_field.map(d => d.field_name.replace(/_/g, ' ')),
+    datasets: [{ data: DATA.completeness_by_field.map(d => d.completeness_pct), backgroundColor: '#B08A46', borderRadius: 4, barThickness: 20 }]
+  },
+  options: {
+    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.parsed.x + '% renseigné' } } },
+    scales: {
+      x: { min: 0, max: 100, ticks: { callback: v => v + '%', color: '#5B564A', font: { size: 11 } }, grid: { color: '#EFEAD9' } },
+      y: { ticks: { color: '#1D1B16', font: { size: 12 } }, grid: { display: false } }
+    }
+  }
+});
+
+new Chart(document.getElementById('disciplineChart'), {
+  type: 'bar',
+  data: {
+    labels: DATA.compliance_by_discipline.map(d => d.discipline),
+    datasets: [{ data: DATA.compliance_by_discipline.map(d => d.compliance_pct), backgroundColor: DATA.compliance_by_discipline.map(d => d.compliance_pct >= 90 ? '#3E6B3A' : d.compliance_pct >= 70 ? '#B08A46' : '#A64F35'), borderRadius: 4, barThickness: 32 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.parsed.y + '% conformes' } } },
+    scales: {
+      y: { min: 0, max: 100, ticks: { callback: v => v + '%', color: '#5B564A', font: { size: 11 } }, grid: { color: '#EFEAD9' } },
+      x: { ticks: { color: '#1D1B16', font: { size: 12 } }, grid: { display: false } }
+    }
+  }
+});
+
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels: DATA.quality_trend.map(d => d.run_date.slice(5)),
+    datasets: [{ data: DATA.quality_trend.map(d => d.overall_quality_score), borderColor: '#16233F', backgroundColor: 'rgba(22,35,63,0.08)', fill: true, tension: 0.3, pointRadius: 4, pointBackgroundColor: '#16233F', borderWidth: 2 }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => 'Score: ' + c.parsed.y } } },
+    scales: {
+      y: { min: 70, max: 90, ticks: { color: '#5B564A', font: { size: 11 } }, grid: { color: '#EFEAD9' } },
+      x: { ticks: { color: '#5B564A', font: { size: 11 } }, grid: { display: false } }
+    }
+  }
+});
+
+let activeDiscipline = 'Toutes';
+function renderFollowup() {
+  const rows = DATA.flagged_for_followup.filter(r => activeDiscipline === 'Toutes' || r.discipline === activeDiscipline);
+  document.getElementById('followup-body').innerHTML = rows.map(r => `
+    <tr>
+      <td>${r.fei_id}</td>
+      <td>${r.horse_name}</td>
+      <td>${r.discipline}</td>
+      <td>${r.country_of_birth}</td>
+      <td><span class="pill"><span class="dot ${r.vaccination_status === 'Expired' ? 'expired' : 'unknown'}"></span>${r.vaccination_status || 'Unknown'}</span></td>
+    </tr>
+  `).join('') || '<tr><td colspan="5" style="color:#5B564A;">Aucun cas pour ce filtre.</td></tr>';
+}
+const disciplines = ['Toutes', ...new Set(DATA.flagged_for_followup.map(r => r.discipline))];
+document.getElementById('discipline-filters').innerHTML = disciplines.map(d => `<button data-d="${d}" class="${d === 'Toutes' ? 'active' : ''}">${d}</button>`).join('');
+document.querySelectorAll('#discipline-filters button').forEach(btn => {
+  btn.addEventListener('click', () => {
+    activeDiscipline = btn.dataset.d;
+    document.querySelectorAll('#discipline-filters button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderFollowup();
+  });
+});
+renderFollowup();
+</script>
+</body>
+</html>
