@@ -1,4 +1,4 @@
-# equipass-open-data — architecture Git & CI/CD
+# equipass-open-data architecture Git & CI/CD
 
 Structure de dépôt épurée, pensée pour un environnement d'équipe FEI
 (collaboration DevOps GIT/Jira/CI-CD mentionnée dans l'offre), appliquée
@@ -10,16 +10,16 @@ ici aux deux livrables précédents (pipeline + dashboard).
 .
 ├── .github/workflows/ci.yml    # pipeline CI/CD (lint, tests, exécution, publication)
 ├── src/
-│   ├── pipeline/                # livrable 1 — pipeline Open Data
+│   ├── pipeline/                # livrable 1 pipeline Open Data
 │   │   ├── pipeline.py
 │   │   └── requirements.txt
-│   └── dashboard/                # livrable 2 — dashboard qualité
+│   └── dashboard/                # livrable 2 dashboard qualité
 │       ├── quality_analysis.sql
 │       ├── build_dashboard_data.py
 │       └── index.html
 ├── data/raw/                    # extraits bruts d'entrée (versionnés pour la démo)
 ├── tests/                        # tests unitaires pytest, exécutés en CI
-├── output/                       # généré par le pipeline — gitignored, publié en artefact CI
+├── output/                       # généré par le pipeline gitignored, publié en artefact CI
 ├── docs/                         # documentation complémentaire
 ├── pyproject.toml                # config ruff (lint) + pytest
 ├── .gitignore
