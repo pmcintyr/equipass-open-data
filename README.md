@@ -28,11 +28,11 @@ ici aux deux livrables précédents (pipeline + dashboard).
 
 ## Stratégie de branches
 
-- **`main`** — toujours déployable. Protégée : merge uniquement via Pull
+- **`main`** toujours déployable. Protégée : merge uniquement via Pull
   Request, CI verte obligatoire (lint + tests + seuil qualité).
-- **`develop`** — intégration continue des fonctionnalités avant passage
+- **`develop`** intégration continue des fonctionnalités avant passage
   en `main`.
-- **`feature/<sujet>`** — une branche par fonctionnalité ou correction,
+- **`feature/<sujet>`** une branche par fonctionnalité ou correction,
   créée depuis `develop`, ex. `feature/microchip-validation`,
   `fix/date-parsing-edge-case`.
 - **Tags** `vX.Y.Z` sur `main` à chaque publication de dataset significative
@@ -67,7 +67,7 @@ de publier silencieusement un jeu de données dégradé.
 - **Traçabilité** : chaque publication de dataset correspond à un commit
   identifiable, avec son rapport qualité associé en artefact CI.
 - **Sécurité de publication** : impossible de publier une régression
-  qualité sans passer le gate — utile quand le dataset est public.
+  qualité sans passer le gate, utile quand le dataset est public.
 - **Onboarding rapide** : structure `src/` par domaine (pipeline,
   dashboard) lisible immédiatement pour un nouveau contributeur de
   l'équipe Technology Operations.
