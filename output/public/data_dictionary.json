@@ -1,0 +1,17 @@
+{
+  "fei_id": "FEI-issued unique identifier for the horse (national federation + number).",
+  "passport_id": "Unique identifier of this digital passport record.",
+  "horse_name": "Registered name of the horse.",
+  "breed": "Declared breed / studbook.",
+  "date_of_birth": "ISO-8601 date of birth, validated against known source formats.",
+  "age_years": "Computed age in years as of the export date.",
+  "sex": "Stallion / Mare / Gelding.",
+  "colour": "Coat colour as declared on the passport.",
+  "country_of_birth": "ISO 3166-1 alpha-3 country code.",
+  "discipline": "FEI discipline the horse is registered to compete in.",
+  "vaccination_status": "Valid / Expired / Unknown as of last recorded check.",
+  "last_vaccination_date": "ISO-8601 date of the last recorded vaccination.",
+  "status": "Active / Inactive registration status.",
+  "_licence": "CC-BY 4.0 (demo) \u2014 mirrors FEI Open Data publication conventions.",
+  "_update_frequency": "Daily, via automated pipeline run."
+}

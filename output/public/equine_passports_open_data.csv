@@ -1,0 +1,19 @@
+fei_id,passport_id,horse_name,breed,date_of_birth,age_years,sex,colour,country_of_birth,discipline,vaccination_status,last_vaccination_date,status
+GER40021,FEI-PP-000001,Cassini's Star,Holsteiner,2015-03-12,11.0,Gelding,Bay,GER,Jumping,Valid,2026-02-14,Active
+FRA40088,FEI-PP-000002,Diamant Noir,Selle Francais,2016-07-01,10.0,Mare,Black,FRA,Dressage,Valid,2025-11-30,Active
+BEL40077,FEI-PP-000004,Lucky Strike Z,Zangersheide,2017-05-23,9.0,Gelding,Grey,BEL,Jumping,Valid,2026-01-10,Active
+ESP40012,FEI-PP-000005,Whisper,Andalusian,2013-11-02,12.0,Mare,Grey,ESP,Dressage,Unknown,,Active
+GER40021,FEI-PP-000006,Cassini's Star,Holsteiner,2015-03-12,11.0,Gelding,Bay,GER,Jumping,Valid,2026-02-14,Active
+GER40099,FEI-PP-000007,Contendro Boy,Hanoverian,2016-08-12,9.0,Gelding,Bay,GER,Jumping,Valid,2026-03-01,Active
+POL40004,FEI-PP-000008,Rubina,Trakehner,2018-02-28,8.0,Mare,Chestnut,POL,Dressage,Valid,2025-09-18,Active
+NED40033,FEI-PP-000009,Zorro,KWPN,2015-09-09,10.0,Gelding,Black,NED,Eventing,Valid,2026-04-05,Inactive
+GER40156,FEI-PP-000010,Kaiser,Oldenburg,,,Stallion,Bay,GER,Jumping,Valid,2026-02-20,Active
+ITA40021,FEI-PP-000011,Bella Notte,Italian Saddle,2016-06-15,10.0,Mare,Black,ITA,Dressage,Expired,2022-01-01,Active
+POR40009,FEI-PP-000012,Amigo,Lusitano,2014-04-04,12.0,Gelding,Grey,POR,Dressage,Valid,2026-01-29,Active
+IRL40044,FEI-PP-000013,Thunderstruck,Irish Sport Horse,2017-08-08,9.0,Gelding,Bay,IRL,Eventing,Valid,2026-03-15,Active
+NED40067,FEI-PP-000015,Golden Girl,Dutch Warmblood,2016-10-10,9.0,Mare,Palomino,NED,Dressage,Valid,2026-02-02,Active
+BEL40009,FEI-PP-000016,Vantage Point,Belgian Warmblood,2013-05-30,13.0,Gelding,Grey,BEL,Jumping,Valid,2025-12-11,Active
+GER40201,FEI-PP-000017,Nocturne,Hanoverian,2018-01-01,8.0,Mare,Black,GER,Dressage,Unknown,,Active
+SUI40003,FEI-PP-000018,Rocket Man,Swiss Warmblood,2015-02-17,11.0,Gelding,Chestnut,SUI,Jumping,Valid,2026-01-05,Active
+FRA40202,FEI-PP-000019,Espoir,Selle Francais,2019-09-19,6.0,Stallion,Bay,FRA,Eventing,Valid,2026-04-22,Active
+SUI40003,FEI-PP-000020,Rocket Man,Swiss Warmblood,2015-02-17,11.0,Gelding,Chestnut,SUI,Jumping,Valid,2026-01-05,Active
