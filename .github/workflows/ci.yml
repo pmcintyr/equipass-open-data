@@ -1,0 +1,87 @@
+name: equipass-open-data-ci
+
+# Runs on every push/PR to validate the pipeline, and on a daily schedule
+# to actually re-publish the Open Data export — mirrors how a real
+# Equipass data feed would stay current without manual intervention.
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: "0 5 * * *"   # 05:00 UTC daily
+  workflow_dispatch: {}    # manual trigger from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  lint-and-test:
+    name: Lint & unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r src/pipeline/requirements.txt ruff pytest
+
+      - name: Lint (ruff)
+        run: ruff check src/
+
+      - name: Unit tests (pytest)
+        run: pytest tests/ -v
+
+  run-pipeline:
+    name: Run Open Data pipeline & publish quality report
+    needs: lint-and-test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.event_name == 'schedule'
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r src/pipeline/requirements.txt
+
+      - name: Run pipeline
+        run: python src/pipeline/pipeline.py --input data/raw/equine_passports_raw.csv --outdir output/
+
+      - name: Check quality gate
+        run: |
+          SCORE=$(python -c "import json; print(json.load(open('output/data_quality_report.json'))['overall_quality_score'])")
+          echo "Quality score: $SCORE"
+          python -c "
+          import json, sys
+          score = json.load(open('output/data_quality_report.json'))['overall_quality_score']
+          THRESHOLD = 70.0
+          if score < THRESHOLD:
+              print(f'Quality score {score} below threshold {THRESHOLD} — failing build')
+              sys.exit(1)
+          "
+
+      - name: Upload Open Data export as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: equipass-open-data-${{ github.run_number }}
+          path: output/
+          retention-days: 90
+
+      - name: Commit refreshed export to gh-pages (Open Data publication)
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "equipass-bot"
+          git config user.email "equipass-bot@users.noreply.github.com"
+          git add output/public
+          git diff --staged --quiet || git commit -m "chore: refresh Open Data export [skip ci]"
+          git push
