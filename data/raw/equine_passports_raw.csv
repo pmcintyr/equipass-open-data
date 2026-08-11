@@ -1,0 +1,21 @@
+passport_id,horse_name,breed,date_of_birth,country_of_birth,owner_name,owner_country,microchip_number,vaccination_status,last_vaccination_date,discipline,fei_id,sex,colour,sire,dam,status
+FEI-PP-000001,Cassini's Star,Holsteiner,2015-03-12,GER,Marion Voss,GER,276098100123456,Valid,2026-02-14,Jumping,GER40021,Gelding,Bay,Cassini II,Stella B,Active
+FEI-PP-000002,Diamant Noir,Selle Francais,2016-07-01,FRA,Pierre Lacroix,FRA,250269604112233,Valid,2025-11-30,Dressage,FRA40088,Mare,Black,Diamant de Semilly,Noiraude,Active
+FEI-PP-000003,,Warmblood,2014-01-19,NED,,NED,,Expired,2023-05-02,Eventing,NED40015,Stallion,Chestnut,,Fleur,Active
+FEI-PP-000004,Lucky Strike Z,Zangersheide,2017-05-23,BEL,Tom Dekeyser,BEL,981000009876543,Valid,2026-01-10,Jumping,BEL40077,Gelding,Grey,Untouchable,Lucky Girl,Active
+FEI-PP-000005,Whisper,Andalusian,2013-11-02,ESP,Marta Ruiz,ESP,724098100998877,Unknown,,Dressage,ESP40012,Mare,Grey,Fuego,Brisa,Active
+FEI-PP-000006,Cassini's Star,Holsteiner,2015-03-12,GER,Marion Voss,GER,276098100123456,Valid,2026-02-14,Jumping,GER40021,Gelding,Bay,Cassini II,Stella B,Active
+FEI-PP-000007,Contendro Boy,Hanoverian,12/08/2016,GER,Hans Weber,GER,276098100223344,Valid,2026-03-01,Jumping,GER40099,Gelding,Bay,Contendro I,Boyara,Active
+FEI-PP-000008,Rubina,Trakehner,2018-02-28,POL,Anna Kowalski,POL,,Valid,2025-09-18,Dressage,POL40004,Mare,Chestnut,Millennium,Rubinia,Active
+FEI-PP-000009,Zorro,KWPN,2015-09-09,NED,Bram de Vries,NED,528210001112223,Valid,2026-04-05,Eventing,NED40033,Gelding,Black,Vaderland,Zora,Inactive
+FEI-PP-000010,Kaiser,Oldenburg,2019-13-45,GER,Ute Schmidt,GER,276098100334455,Valid,2026-02-20,Jumping,GER40156,Stallion,Bay,Kaiserwind,Kelly,Active
+FEI-PP-000011,Bella Notte,Italian Saddle,2016-06-15,ITA,Giulia Bianchi,ITA,380271000445566,Expired,2022-01-01,Dressage,ITA40021,Mare,Black,Notte Fonda,Bella Vita,Active
+FEI-PP-000012,Amigo,Lusitano,2014-04-04,POR,Joao Silva,POR,620098100556677,Valid,2026-01-29,Dressage,POR40009,Gelding,Grey,Novilheiro,Amiga,Active
+FEI-PP-000013,Thunderstruck,Irish Sport Horse,2017-08-08,IRL,Sean O'Brien,IRL,372098100667788,Valid,2026-03-15,Eventing,IRL40044,Gelding,Bay,Thunder God,Struck Gold,Active
+FEI-PP-000014,,Selle Francais,2015-12-25,FRA,,,,,,Jumping,FRA40155,Gelding,Chestnut,,,Active
+FEI-PP-000015,Golden Girl,Dutch Warmblood,2016-10-10,NED,Sophie Jansen,NED,528210002223344,Valid,2026-02-02,Dressage,NED40067,Mare,Palomino,Gold Rush,Girlie,Active
+FEI-PP-000016,Vantage Point,Belgian Warmblood,2013-05-30,BEL,Marc Peeters,BEL,981000019988776,Valid,2025-12-11,Jumping,BEL40009,Gelding,Grey,Vantage,Pointe,Active
+FEI-PP-000017,Nocturne,Hanoverian,2018-01-01,GER,Karin Fischer,GER,276098100778899,Unknown,,Dressage,GER40201,Mare,Black,Night Rider,Nocturna,Active
+FEI-PP-000018,Rocket Man,Swiss Warmblood,2015-02-17,SUI,Laurent Dupont,SUI,756098100889900,Valid,2026-01-05,Jumping,SUI40003,Gelding,Chestnut,Rocket,Manuela,Active
+FEI-PP-000019,Espoir,Selle Francais,2019-09-19,FRA,Camille Petit,FRA,250269605998877,Valid,2026-04-22,Eventing,FRA40202,Stallion,Bay,Esperance,Poirette,Active
+FEI-PP-000020,Rocket Man,Swiss Warmblood,2015-02-17,SUI,Laurent Dupont,SUI,756098100889900,Valid,2026-01-05,Jumping,SUI40003,Gelding,Chestnut,Rocket,Manuela,Active
