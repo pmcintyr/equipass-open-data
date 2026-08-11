@@ -1,0 +1,18 @@
+[tool.ruff]
+line-length = 110
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+# DTZ (timezone-aware datetimes) intentionally excluded: this pipeline only
+# ever handles calendar dates (date of birth, vaccination date), never
+# instants, so tz-awareness would add noise without adding correctness.
+ignore = []
+
+[tool.ruff.lint.per-file-ignores]
+# Embedded SQL in triple-quoted strings is intentionally not wrapped —
+# wrapping mid-query hurts readability more than the line-length rule helps.
+"src/dashboard/build_dashboard_data.py" = ["E501"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
